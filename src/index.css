@@ -43,6 +43,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(255.35deg, #DC3131 0.83%, rgba(255, 79, 79, 0) 108.93%),
+              linear-gradient(0deg, #FF5E56, #FF5E56);
+
 }
 
 button {
