@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useMemo, useState } from 'react';
-import styles from './calcForm.module.css';
 import { countPayment, CheckboxProps, monthsCheckboxes, periodCheckboxes, pluralize } from '../../utils/utils';
+import styles from './calcForm.module.css';
 
 
 const CalcForm = () => {
@@ -79,7 +79,8 @@ const CalcForm = () => {
             <h3 className={styles.title}>Платежи по кредиту</h3>
             <p className={styles.text}>Введите сумму кредита и выберите срок, на который вы хотите его оформить.</p>
             <p className={styles.text}>Мы автоматически рассчитаем для вас ежемесячный платеж, чтобы вы могли лучше спланировать свои финансы.</p>
-            <label className={styles.label}>Ваша сумма кредита
+            <label className={styles.label}>
+                <p className={styles.point}>Ваша сумма кредита</p>
                 <input className={styles.input}
                     type='text'
                     placeholder='Введите данные'

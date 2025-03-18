@@ -1,5 +1,5 @@
-import styles from './overlay.module.css';
 import { FC, ReactElement, SyntheticEvent } from "react";
+import styles from './overlay.module.css';
 
 type OverlayProps = {
     closeHandler: () => void;

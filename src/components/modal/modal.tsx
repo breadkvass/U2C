@@ -1,8 +1,8 @@
 import { useEffect, useCallback, SyntheticEvent, useContext, FC, ReactElement } from 'react';
 import { ModalContext } from '../../hooks/useModal/useModalProvider';
 import Overlay from './overlay/overlay';
-import styles from "./modal.module.css";
 import CloseButton from '../closeButton/closeIcon';
+import styles from "./modal.module.css";
 
 const stopPropagation = (e: SyntheticEvent<Element, Event>) => e.stopPropagation();
 
