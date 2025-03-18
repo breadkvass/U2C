@@ -10,7 +10,21 @@
 .closeButton {
     position: absolute;
     top: 16px;
-    right: 12px;
+    right: 16px;
     width: 40px;
     aspect-ratio: 1 / 1;
+}
+
+@media (max-width: 767px) {
+    .modal {
+        height: 100%;
+        width: 100%;
+        padding: 0 16px;
+        position: static;
+        border-radius: 0;
+    }
+
+    .closeButton {
+        width: 24px;
+    }
 }
