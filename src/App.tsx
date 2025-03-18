@@ -1,10 +1,11 @@
 import './App.css'
+import PaymentCalc from './components/paymentCalc/paymentCalc'
 
 function App() {
 
   return (
     <>
-      UTC
+      <PaymentCalc />
     </>
   )
 }

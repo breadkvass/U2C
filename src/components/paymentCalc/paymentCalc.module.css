@@ -1,0 +1,33 @@
+.button {
+    color: white;
+    font-family: 'Lab Grotesque';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    padding: 16px 32px;
+    border: 1px solid white;
+    border-radius: 6px;
+}
+
+@media (max-width: 767px) {
+    .button {
+        font-size: 12px;
+        line-height: 16px;
+        padding: 12px 24px;
+    }
+}
+
+.button:hover {
+    background-color: white;
+    color: black;
+}
+
+.button:active {
+    background-color: white;
+    color: black;
+}
+
+.button:disabled {
+    background-color: white;
+    color: black;
+}
