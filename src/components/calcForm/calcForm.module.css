@@ -19,13 +19,14 @@
 }
 
 .label {
-    margin: 10px 0 8px 0;
+    margin: 10px 0 16px 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
     font-weight: 500;
     font-size: 14px;
     line-height: 24px;
+    position: relative;
 }
 
 .input {
@@ -37,6 +38,10 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 24px;
+}
+
+.input::after {
+    content: ' ₽';
 }
 
 .input:hover {
@@ -59,12 +64,17 @@
     color: #DFE3E6;
 }
 
-.input .error {
+input .error {
     border-color: #EA0029;
 }
 
-p .error {
+.error {
     color: #EA0029;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    position: absolute;
+    bottom: -16px;
 }
 
 .textButton {

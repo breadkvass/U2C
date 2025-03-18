@@ -1,31 +1,63 @@
-import { FC, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useMemo, useState } from 'react';
 import styles from './calcForm.module.css';
+import { countPayment, CheckboxProps, monthsCheckboxes, periodCheckboxes, pluralize } from '../../utils/utils';
 
-type CheckboxProps = {
-    value: string;
-    type: 'monthes' | 'period';
-}
 
 const CalcForm = () => {
-    const [ amount, setAmount ] = useState<number>();
+    const [ amountInputValue, setAmountInputValue ] = useState('')
+    const [ amount, setAmount ] = useState('');
     const [ monthsValue, setMonthsValue ] = useState('12');
-    const [ period, setPeriod ] = useState('в год');
-    const [ res, setRes ] = useState<number>();
+    const [ isFullCalc, setIsFullCalc ] = useState(false);
+    const [ periodValue, setPeriodValue ] = useState('в месяц');
+    const [ error, setError ] = useState('');
 
     const onSubmitHandler = () => {
-        console.log('рассчитать')
+        console.log('добавить')
+    }
+
+    const countedPayment = useMemo(() => countPayment(amount, periodValue, monthsValue), [amountInputValue, amount, periodValue, monthsValue])
+    const rub = useMemo(() => pluralize(Number(countedPayment)), [countedPayment])
+
+    const onCheckHandler = (e: ChangeEvent<HTMLInputElement>, type: string) => {
+        if (type === 'months') {
+            validate();
+            setMonthsValue(e.target.value);
+        } else if (type === 'period') {
+            validate();
+            setPeriodValue(e.target.value);
+        };
+    }
+    
+    const validate = () => {
+        const checkedAmount = amountInputValue.replace('₽','').replace(/\s/g, '')
+
+        if (!checkedAmount) {
+            setError('Поле обязательно для заполнения');
+            setIsFullCalc(false);
+        } else if (Number(checkedAmount) <= 999 ) {
+            setError('Введите число более 1000');
+            setIsFullCalc(false);
+        } else if (Number(checkedAmount) > 999999999 ) {
+            setError('Число слишком большое');
+            setIsFullCalc(false);
+        } else if (Number(checkedAmount) > 999) {
+            setError('');
+            setAmount(checkedAmount);
+        }
+    }
+
+    const onClickCountHandler = (e: FormEvent) => {
+        e.preventDefault();
+        validate();
+        setIsFullCalc(true);
     }
 
     const Checkbox: FC<CheckboxProps> = ({value, type}) => {
         return (
             <li>
                 <input type="checkbox"
-                    checked={(type === 'monthes' ? monthsValue : period) === value}
-                    onChange={(e) => {
-                        if (type === 'monthes') {
-                            setMonthsValue(e.target.value)
-                        } else setPeriod(e.target.value)
-                    }}
+                    checked={(type === 'months' ? monthsValue : periodValue) === value}
+                    onChange={(e) => onCheckHandler(e, type)}
                     id={value}
                     name={value}
                     value={value}
@@ -35,6 +67,13 @@ const CalcForm = () => {
         )
     }
 
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        let res = e.target.value.replace(/\d $/, '').replace(/\D/g, '').replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1 ')+ ' ₽';
+                        
+        if (res === ' ₽') setAmountInputValue('')
+            else setAmountInputValue(res)
+    }
+
     return (
         <form className={styles.form} onSubmit={onSubmitHandler}>
             <h3 className={styles.title}>Платежи по кредиту</h3>
@@ -42,31 +81,30 @@ const CalcForm = () => {
             <p className={styles.text}>Мы автоматически рассчитаем для вас ежемесячный платеж, чтобы вы могли лучше спланировать свои финансы.</p>
             <label className={styles.label}>Ваша сумма кредита
                 <input className={styles.input}
-                    type='number'
+                    type='text'
                     placeholder='Введите данные'
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
+                    value={amountInputValue}
+                    onChange={onChangeInputHandler}
+                    required
                 />
+                {<p className={styles.error}>{error}</p>}
             </label>
-            <button className={styles.textButton}>Рассчитать</button>
+            <button className={styles.textButton} onClick={onClickCountHandler}> Рассчитать</button>
             <div className={styles.months}>
                 <p className={styles.point}>Количество месяцев?</p>
                 <ul className={styles.checkboxes}>
-                    <Checkbox value='12' type='monthes' />
-                    <Checkbox value='24' type='monthes' />
-                    <Checkbox value='36' type='monthes' />
-                    <Checkbox value='48' type='monthes' />
+                    {monthsCheckboxes.map((item, i) => <Checkbox key={i} value={item.value} type={item.type} />)}
                 </ul>
             </div>
-            <div className={styles.periods}>
-                <p className={styles.point}>Итого ваш платеж по кредиту:</p>
-                <ul className={styles.checkboxes}>
-                    <Checkbox value='в год' type='period' />
-                    <Checkbox value='в месяц' type='period' />
-                </ul>
-            </div>
-            <p className={styles.res}>{res} рублей</p>
-
+            {isFullCalc && amount && <>
+                <div className={styles.periods}>
+                    <p className={styles.point}>Итого ваш платеж по кредиту:</p>
+                    <ul className={styles.checkboxes}>
+                        {periodCheckboxes.map((item, i) => <Checkbox key={i} value={item.value} type={item.type} />)}
+                    </ul>
+                </div>
+                <p className={styles.res}>{`${countedPayment} ${rub}`}</p>
+            </>}
             <button className={styles.submitButton} type='submit'>Добавить</button>
         </form>
     )
