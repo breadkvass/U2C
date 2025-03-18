@@ -1,0 +1,16 @@
+.modal {
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 30px;
+    position: absolute;
+    padding: 32px;
+    position: relative;
+}
+
+.closeButton {
+    position: absolute;
+    top: 16px;
+    right: 12px;
+    width: 40px;
+    aspect-ratio: 1 / 1;
+}
